@@ -1,5 +1,6 @@
 package com.bvilela.demo.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +9,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bvilela.demo.ListBuilderException;
+import com.bvilela.demo.dto.VidaCristaExtractWeekDTO;
 import com.bvilela.demo.entity.Test1;
 import com.bvilela.demo.service.Test1Service;
+import com.bvilela.demo.service.Test2ExtractService;
 
 @RestController
 public class DemoController {
 	
 	private Test1Service service;
 	
+	private Test2ExtractService extractService;
+	
 	@Autowired
-	public DemoController(Test1Service service) {
+	public DemoController(Test1Service service, Test2ExtractService extractService) {
 		this.service = service;
+		this.extractService = extractService;
+	}
+	
+	@GetMapping("/")
+	public String helloWorld() {
+		return "Hello World ;)";
 	}
 
 	@GetMapping("/method-1")
@@ -42,4 +54,12 @@ public class DemoController {
 		return service.getAllItens();
 	}
 	
+	@GetMapping("/test2")
+	@ResponseStatus(code = HttpStatus.OK)
+	public List<VidaCristaExtractWeekDTO> getExtractDataFromJW() throws IOException, ListBuilderException {
+		var url = "https://www.jw.org/pt/biblioteca/jw-apostila-do-mes/julho-agosto-2022-mwb/";
+		var listWeeks = extractService.extractWeeksBySite(url);
+		extractService.extractWeekItemsBySite(listWeeks);
+		return listWeeks;
+	}
 }
