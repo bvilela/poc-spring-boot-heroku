@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.SSLContext;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -57,7 +59,15 @@ public class Test2ExtractServiceImpl implements Test2ExtractService {
 	@Override
 	public List<VidaCristaExtractWeekDTO> extractWeeksBySite(String url) throws IOException, ListBuilderException {
 		log.info("Extraindo Dados da URL: {}", url);
-		Document doc = Jsoup.connect(url).get();
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(url)
+					.sslSocketFactory(SSLContext.getInstance("TLS").getSocketFactory())
+					.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.80 Safari/537.36")
+					.get();			
+		} catch (Exception e) {
+			throw new ListBuilderException(e.getMessage());
+		}
 
 		Elements header = doc.select("span.contextTitle");
 		checkEmpty(header, "Erro ao ler Cabeçalho do site");
