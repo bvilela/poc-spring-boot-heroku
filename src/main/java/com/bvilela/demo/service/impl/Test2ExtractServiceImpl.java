@@ -81,11 +81,11 @@ public class Test2ExtractServiceImpl implements Test2ExtractService {
 			};
 			SSLContext sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(null, trustAllCerts, new SecureRandom());
-			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+//			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 			
 			doc = Jsoup.connect(url)
-//					.sslSocketFactory(SSLContext.getInstance("TLS").getSocketFactory())
-//					.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.80 Safari/537.36")
+					.sslSocketFactory(sslContext.getSocketFactory())
+					.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.80 Safari/537.36")
 					.get();
 		} catch (Exception e) {
 			throw new ListBuilderException(e.getMessage());
