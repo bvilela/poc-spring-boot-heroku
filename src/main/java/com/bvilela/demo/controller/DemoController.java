@@ -45,7 +45,7 @@ public class DemoController {
 	
 	@GetMapping("/version")
 	public String version() {
-		return "0.0.1";
+		return "0.0.2";
 	}
 	
 	@GetMapping("/all-itens-test1")
