@@ -86,9 +86,10 @@ public class Test2ExtractServiceImpl implements Test2ExtractService {
 					.sslSocketFactory(sslContext.getSocketFactory())
 //					.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.80 Safari/537.36")
 					.userAgent("Opera")
-					.timeout(0)
+//					.timeout(0)
 					.get();
 		} catch (Exception e) {
+			log.error("Erro JSOUP: {}", e);
 			throw new ListBuilderException(e.getMessage());
 		}
 
