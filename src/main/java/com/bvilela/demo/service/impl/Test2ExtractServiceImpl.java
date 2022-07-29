@@ -14,8 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -67,40 +66,27 @@ public class Test2ExtractServiceImpl implements Test2ExtractService {
 		log.info("Extraindo Dados da URL: {}", url);
 		Document doc = null;
 		try {
-//			KeyStore clientStore = KeyStore.getInstance( "PKCS12" );
-//			clientStore.load( certificate, password.toCharArray() );
-
-			KeyManagerFactory kmf = KeyManagerFactory.getInstance( KeyManagerFactory.getDefaultAlgorithm() );
-//			kmf. init( clientStore, password.toCharArray() );
-			KeyManager[] kms = kmf.getKeyManagers();
-
 			TrustManager[] trustAllCerts = new TrustManager[] {
-					new X509TrustManager() {
-
-						@Override
-						public synchronized void checkClientTrusted(X509Certificate[] chain, String authType)
-								throws java.security.cert.CertificateException {
-						}
-
-						@Override
-						public synchronized void checkServerTrusted(X509Certificate[] chain, String authType)
-								throws java.security.cert.CertificateException {
-						}
-
-						@Override
-						public synchronized X509Certificate[] getAcceptedIssuers() {
-							return new X509Certificate[0];
-						}
+				new X509TrustManager() {					
+					public X509Certificate[] getAcceptedIssuers() {
+						return null;
 					}
-			};
 
+					public void checkClientTrusted(X509Certificate[] certs, String authType) {
+					}
+
+					public void checkServerTrusted(X509Certificate[] certs, String authType) {
+					}
+				}
+			};
 			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(kms, trustAllCerts, new SecureRandom());
+			sslContext.init(null, trustAllCerts, new SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 			
 			doc = Jsoup.connect(url)
-					.sslSocketFactory(SSLContext.getInstance("TLS").getSocketFactory())
-					.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.80 Safari/537.36")
-					.get();			
+//					.sslSocketFactory(SSLContext.getInstance("TLS").getSocketFactory())
+//					.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.80 Safari/537.36")
+					.get();
 		} catch (Exception e) {
 			throw new ListBuilderException(e.getMessage());
 		}
