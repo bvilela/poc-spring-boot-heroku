@@ -65,30 +65,31 @@ public class Test2ExtractServiceImpl implements Test2ExtractService {
 		log.info("Extraindo Dados da URL: {}", url);
 		Document doc = null;
 		try {
-			TrustManager[] trustAllCerts = new TrustManager[] {
-				new X509TrustManager() {					
-					public X509Certificate[] getAcceptedIssuers() {
-						return null;
-					}
-
-					public void checkClientTrusted(X509Certificate[] certs, String authType) {
-					}
-
-					public void checkServerTrusted(X509Certificate[] certs, String authType) {
-					}
-				}
-			};
-			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, trustAllCerts, new SecureRandom());
+//			TrustManager[] trustAllCerts = new TrustManager[] {
+//				new X509TrustManager() {					
+//					public X509Certificate[] getAcceptedIssuers() {
+//						return null;
+//					}
+//
+//					public void checkClientTrusted(X509Certificate[] certs, String authType) {
+//					}
+//
+//					public void checkServerTrusted(X509Certificate[] certs, String authType) {
+//					}
+//				}
+//			};
+//			SSLContext sslContext = SSLContext.getInstance("TLS");
+//			sslContext.init(null, trustAllCerts, new SecureRandom());
 //			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 			
 			doc = Jsoup.connect(url)
 //					.sslSocketFactory(sslContext.getSocketFactory())
 //					.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.80 Safari/537.36")
-					.userAgent("Opera")
+//					.userAgent("Opera")
 //					.timeout(0)
 					.get();
 		} catch (Exception e) {
+			log.error("Erro JSOUP: {}", e.getMessage());
 			log.error("Erro JSOUP: {}", e);
 			throw new ListBuilderException(e.getMessage());
 		}

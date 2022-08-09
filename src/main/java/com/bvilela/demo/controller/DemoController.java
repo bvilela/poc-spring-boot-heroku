@@ -45,7 +45,7 @@ public class DemoController {
 	
 	@GetMapping("/version")
 	public String version() {
-		return "0.0.2";
+		return "0.0.3";
 	}
 	
 	@GetMapping("/all-itens-test1")
@@ -57,9 +57,9 @@ public class DemoController {
 	@GetMapping("/test2")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<VidaCristaExtractWeekDTO> getExtractDataFromJW() throws IOException, ListBuilderException {
-		var url = "https://www.jw.org/pt/biblioteca/jw-apostila-do-mes/julho-agosto-2022-mwb/";
+		var url = "http://www.jw.org/pt/biblioteca/jw-apostila-do-mes/julho-agosto-2022-mwb/";
 		var listWeeks = extractService.extractWeeksBySite(url);
-		extractService.extractWeekItemsBySite(listWeeks);
+//		extractService.extractWeekItemsBySite(listWeeks);
 		return listWeeks;
 	}
 }
